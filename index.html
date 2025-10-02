@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IEEE 42010 → 批判的実在論への圏論的翻訳</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Yu Gothic', 'Meiryo', sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .presentation-container {
+            width: 1400px;
+            height: 788px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            padding: 50px 60px;
+            display: none;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #11998e;
+            padding-bottom: 15px;
+        }
+
+        .slide-header h1 {
+            font-size: 2em;
+            color: #1a202c;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-header .subtitle {
+            font-size: 1.2em;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .content-section {
+            margin: 25px 0;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #11998e;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 5px solid #11998e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+        }
+
+        th {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            background: #f7fafc;
+        }
+
+        tr:nth-child(even) td {
+            background: #edf2f7;
+        }
+
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px 0;
+            gap: 15px;
+        }
+
+        .process-box {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border: 3px solid #11998e;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            min-width: 200px;
+            flex: 1;
+        }
+
+        .process-box .title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .process-box .desc {
+            font-size: 0.9em;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #11998e;
+            font-weight: bold;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border-left: 6px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .key-concept-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 3px solid #4caf50;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .preservation-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 3px solid #2196f3;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .transformation-box {
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+            border: 3px solid #e91e63;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .example-box {
+            background: white;
+            border: 3px solid #11998e;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .critical-realism-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 3px solid #ff6f00;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            background: #11998e;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #0d7a6f;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            color: #a0aec0;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        ul li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #11998e;
+            font-size: 0.8em;
+        }
+
+        strong {
+            color: #2d3748;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px solid #4caf50;
+        }
+
+        .three-layer {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .layer {
+            padding: 15px;
+            border-radius: 10px;
+            border: 3px solid;
+        }
+
+        .layer-real {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-color: #c62828;
+        }
+
+        .layer-actual {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-color: #ef6c00;
+        }
+
+        .layer-empirical {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: タイトル -->
+        <div class="slide active">
+            <div class="slide-header">
+                <h1>IEEE 42010 → 批判的実在論</h1>
+                <div class="subtitle">圏論的翻訳メカニズムの実例</div>
+            </div>
+
+            <div class="key-concept-box">
+                <h3 style="color: #2e7d32; margin-bottom: 15px; font-size: 1.3em;">翻訳の全体像</h3>
+                <div class="formula">
+                    翻訳 = π_CR ∘ 変換_{Its→(We∪Its)} ∘ embed_IEEE
+                </div>
+                <p style="margin-top: 15px; font-size: 1.1em; color: #2d3748; line-height: 1.8;">
+                    システム工学の客観的技術設計理論を、<br>
+                    社会変革のための批判的実在論へと<br>
+                    <strong style="color: #c62828;">構造を保ちながら変換</strong>する
+                </p>
+            </div>
+
+            <div class="process-flow">
+                <div class="process-box" style="background: linear-gradient(135deg, #fff8e1, #ffecb3); border-color: #ff9800;">
+                    <div class="title" style="color: #e65100;">ステップ1</div>
+                    <div class="desc">埋め込み<br>Embedding</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-box" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-color: #ff6f00;">
+                    <div class="title" style="color: #e65100;">ステップ2</div>
+                    <div class="desc">象限変換<br>Transformation</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="process-box" style="background: linear-gradient(135deg, #ffebee, #ffcdd2); border-color: #c62828;">
+                    <div class="title" style="color: #b71c1c;">ステップ3</div>
+                    <div class="desc">射影<br>Projection</div>
+                </div>
+            </div>
+
+            <div class="critical-realism-box">
+                <h3 style="color: #e65100; margin-bottom: 10px;">批判的実在論の特徴</h3>
+                <p style="line-height: 1.7;">
+                    技術システムの表面的問題から<strong>深層の社会構造的問題</strong>への遡及的分析を可能にする。<br>
+                    技術的「問題解決」を社会的「構造変革」へと転換しながらも、認識プロセスの基本構造は保存される。
+                </p>
+            </div>
+
+            <div class="highlight-box">
+                <strong style="font-size: 1.2em;">本スライドの構成：</strong><br>
+                スライド2: ステップ1 - IEEE 42010のM⁶⁵空間への埋め込み<br>
+                スライド3: ステップ2 - Its象限から(We∪Its)象限への変換<br>
+                スライド4: ステップ3 - 批判的実在論への射影<br>
+                スライド5: 完全な翻訳例と構造保存性の検証
+            </div>
+
+            <div class="slide-number">1/5</div>
+        </div>
+
+        <!-- Slide 2: ステップ1 埋め込み -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>ステップ1: 埋め込み (Embedding)</h1>
+                <div class="subtitle">embed_IEEE: IEEE 42010 → M⁶⁵|Its象限</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">IEEE 42010の6要素をM⁶⁵座標に配置</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">IEEE 42010要素</th>
+                            <th style="width: 75%;">M⁶⁵座標 (プロセス次元, 象限, その他の5要素構造)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Stakeholder</strong><br>利害関係者・建築家</td>
+                            <td><strong>Observer@Its象限</strong>, Level=成熟度3-4, Line=システム工学領域<br>役割として定義された技術システムの関係者</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Concern</strong><br>関心事・環境制約</td>
+                            <td><strong>Focus@Its象限</strong>, 技術的制約・性能要求・外部環境要因<br>客観的に定義可能なシステム要求</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Viewpoint</strong><br>視点定義・フレームワーク</td>
+                            <td><strong>Method@Its象限</strong>, アーキテクチャ記述方法論<br>標準化された設計アプローチ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>View</strong><br>アーキテクチャビュー</td>
+                            <td><strong>Construction@Its象限</strong>, システム設計成果物<br>具体的な設計ドキュメント・モデル</td>
+                        </tr>
+                        <tr>
+                            <td><strong>System</strong><br>目標アーキテクチャ</td>
+                            <td><strong>Target@Its象限</strong>, 実現すべき技術システム<br>客観的に検証可能なシステム仕様</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Description</strong><br>記述・評価結果</td>
+                            <td><strong>Data@Its象限</strong>, 客観的システム仕様書・テスト結果<br>定量的・測定可能な技術データ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="key-concept-box">
+                <h3 style="color: #2e7d32; margin-bottom: 10px;">埋め込みの特性</h3>
+                <ul style="margin-top: 10px;">
+                    <li><strong>象限：Its (集合外面)</strong> - 客観的で観察可能な技術システム領域</li>
+                    <li><strong>証拠の性質：</strong>定量的・測定可能・検証可能な技術データ</li>
+                    <li><strong>主体の性質：</strong>役割として定義された利害関係者(職務上の立場)</li>
+                </ul>
+            </div>
+
+            <div class="slide-number">2/5</div>
+        </div>
+
+        <!-- Slide 3: ステップ2 象限変換 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>ステップ2: 象限変換 (Transformation)</h1>
+                <div class="subtitle">変換: M⁶⁵|Its → M⁶⁵|(We∪Its)</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">変換される要素と保存される構造</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">要素</th>
+                            <th style="width: 28%;">Its象限での表現</th>
+                            <th style="width: 28%;">(We∪Its)象限への変換</th>
+                            <th style="width: 29%;">変換の性質</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Observer</strong></td>
+                            <td>システム利害関係者<br>(役割)</td>
+                            <td>社会変革行為主体<br>(Agency)</td>
+                            <td style="color: #c62828; font-weight: bold;">技術的役割→社会的行為主体へ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Focus</strong></td>
+                            <td>技術的制約・要求</td>
+                            <td>社会機構・権力構造</td>
+                            <td style="color: #c62828; font-weight: bold;">技術的問題→社会構造的問題へ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Method</strong></td>
+                            <td>システム設計視点</td>
+                            <td>変革条件・介入戦略</td>
+                            <td style="color: #c62828; font-weight: bold;">技術的方法→社会変革方法へ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Construction</strong></td>
+                            <td>設計成果物(ビュー)</td>
+                            <td>実際的事象・社会変化</td>
+                            <td style="color: #c62828; font-weight: bold;">技術的成果物→社会的変革実践へ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Target</strong></td>
+                            <td>目標システム</td>
+                            <td>実在構造・深層変革</td>
+                            <td style="color: #c62828; font-weight: bold;">技術的システム→社会的実在へ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Data</strong></td>
+                            <td>技術仕様書・評価結果</td>
+                            <td>経験データ・観察現象</td>
+                            <td style="color: #c62828; font-weight: bold;">技術的データ→社会的経験データへ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="preservation-box">
+                <h3 style="color: #1565c0; margin-bottom: 10px;">✓ 保存される構造</h3>
+                <ul>
+                    <li><strong>6要素間の射の合成関係:</strong> attend ∘ select ∘ apply ∘ aim ∘ evidence ∘ learn</li>
+                    <li><strong>循環的フィードバック構造:</strong> 社会変革の循環的プロセス</li>
+                    <li><strong>要素間の依存関係:</strong> Mechanismの理解なくしてCondition(変革戦略)は選べない</li>
+                </ul>
+            </div>
+
+            <div class="transformation-box">
+                <h3 style="color: #c62828; margin-bottom: 10px;">✗ 意図的に変化する性質</h3>
+                <ul>
+                    <li><strong>視点:</strong> 純技術的(Its) → 社会文化的+技術的(We∪Its)</li>
+                    <li><strong>存在論:</strong> 技術的実在 → 批判的実在論的三層構造</li>
+                    <li><strong>目的:</strong> システム最適化 → 社会変革と解放</li>
+                    <li><strong>証拠の性質:</strong> 技術的測定データ → 社会現象の経験的データ</li>
+                </ul>
+            </div>
+
+            <div class="slide-number">3/5</div>
+        </div>
+
+        <!-- Slide 4: ステップ3 射影 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>ステップ3: 射影 (Projection)</h1>
+                <div class="subtitle">π_CR: M⁶⁵|(We∪Its) → 批判的実在論</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-title">M⁶⁵座標から批判的実在論の用語体系への再解釈</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">M⁶⁵|(We∪Its)の座標</th>
+                            <th style="width: 30%;">批判的実在論の概念</th>
+                            <th style="width: 40%;">具体例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Observer@(We∪Its)</td>
+                            <td><strong>Agency</strong><br>(個人・集合行為主体)</td>
+                            <td>社会的抑圧構造を認識し変革しようとする研究者・活動家・コミュニティ</td>
+                        </tr>
+                        <tr>
+                            <td>Focus@(We∪Its)</td>
+                            <td><strong>Mechanism</strong><br>(社会機構・権力構造)</td>
+                            <td>技術システムに埋め込まれた権力関係・格差構造・排除のメカニズム</td>
+                        </tr>
+                        <tr>
+                            <td>Method@(We∪Its)</td>
+                            <td><strong>Condition</strong><br>(変革条件・介入戦略)</td>
+                            <td>社会構造を明らかにし変革するための批判的方法論</td>
+                        </tr>
+                        <tr>
+                            <td>Construction@(We∪Its)</td>
+                            <td><strong>Actual</strong><br>(実際的事象・社会変化)</td>
+                            <td>実際に起きている社会的出来事・技術システムの社会的帰結</td>
+                        </tr>
+                        <tr>
+                            <td>Target@(We∪Its)</td>
+                            <td><strong>Real</strong><br>(実在構造・深層変革)</td>
+                            <td>目に見えない深層の社会構造・メカニズム・因果的力の変革</td>
+                        </tr>
+                        <tr>
+                            <td>Data@(We∪Its)</td>
+                            <td><strong>Empirical</strong><br>(経験データ・観察現象)</td>
+                            <td>人々が経験する社会現象・技術システムの影響の観察データ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="critical-realism-box">
+                <h3 style="color: #e65100; margin-bottom: 15px;">批判的実在論の三層ドメイン構造</h3>
+                <div class="three-layer">
+                    <div class="layer layer-real">
+                        <strong style="color: #b71c1c;">Real Domain (実在的ドメイン)</strong><br>
+                        目に見えない深層構造・メカニズム・因果的力 → <strong>Target</strong>に対応
+                    </div>
+                    <div class="layer layer-actual">
+                        <strong style="color: #e65100;">Actual Domain (実際的ドメイン)</strong><br>
+                        実際に起きる出来事・社会変化 → <strong>Construction</strong>に対応
+                    </div>
+                    <div class="layer layer-empirical">
+                        <strong style="color: #2e7d32;">Empirical Domain (経験的ドメイン)</strong><br>
+                        観察可能・経験可能な現象 → <strong>Data</strong>に対応
+                    </div>
+                </div>
+                <p style="margin-top: 15px; line-height: 1.7;">
+                    この層構造により、技術システムの表面的問題から深層の社会構造的問題への<strong>遡及的分析</strong>が可能になる
+                </p>
+            </div>
+
+            <div class="slide-number">4/5</div>
+        </div>
+
+        <!-- Slide 5: 完全な翻訳例と検証 -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>完全な翻訳例と構造保存性の検証</h1>
+                <div class="subtitle">翻訳 = π_CR ∘ 変換_{Its→(We∪Its)} ∘ embed_IEEE</div>
+            </div>
+
+            <div class="example-box">
+                <h3 style="color: #11998e; margin-bottom: 15px;">具体的翻訳例</h3>
+                
+                <div style="background: #fff8e1; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #e65100;">IEEE 42010での記述:</strong>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        "Stakeholder 'システム運用者' has Concern 'システムの信頼性向上' and designs System 'クリティカルインフラシステム' through Viewpoint 'セキュリティ設計視点'"
+                    </p>
+                </div>
+
+                <div class="arrow" style="text-align: center; margin: 10px 0;">↓</div>
+
+                <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #ef6c00;">埋め込み後 M⁶⁵|Its座標:</strong>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Observer=システム運用者(役割), Focus=技術的信頼性要求, Method=標準的セキュリティ設計手法, Target=信頼性の高いシステム, @Its象限
+                    </p>
+                </div>
+
+                <div class="arrow" style="text-align: center; margin: 10px 0;">↓</div>
+
+                <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #c62828;">象限変換後 M⁶⁵|(We∪Its)座標:</strong>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Observer=社会的行為主体, Focus=技術システムに埋め込まれた権力構造, Method=批判的分析と変革戦略, Target=より公正な社会構造, @(We∪Its)象限
+                    </p>
+                </div>
+
+                <div class="arrow" style="text-align: center; margin: 10px 0;">↓</div>
+
+                <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong style="color: #2e7d32;">射影後 批判的実在論での記述:</strong>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        "Agency 'システム設計に関わる研究者・技術者' は Mechanism 'クリティカルインフラに埋め込まれたアクセス格差・技術的排除の構造' を認識し、Condition '批判的システム設計方法論' を用いて、Actual '現実の技術システムにおける不平等' を分析し、Real '深層にある社会構造的不正義の根本原因' を明らかにして変革する。Empirical '人々が経験する技術的排除やアクセス困難' というデータに基づく"
+                    </p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="preservation-box">
+                    <h3 style="color: #1565c0; margin-bottom: 10px;">保存された構造</h3>
+                    <ul style="font-size: 0.95em;">
+                        <li><strong>射の合成則:</strong> 順序関係の保存</li>
+                        <li><strong>循環構造:</strong> 社会変革の循環的プロセス</li>
+                        <li><strong>要素間依存関係:</strong> 因果的理解の構造</li>
+                    </ul>
+                </div>
+
+                <div class="transformation-box">
+                    <h3 style="color: #c62828; margin-bottom: 10px;">意図的に変化した要素</h3>
+                    <ul style="font-size: 0.95em;">
+                        <li><strong>存在論:</strong> 技術的実在 → 三層構造</li>
+                        <li><strong>目的:</strong> 最適化 → 変革と解放</li>
+                        <li><strong>主体:</strong> 技術的役割 → 社会的エージェンシー</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="slide-number">5/5</div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn">← 前へ</button>
+        <button class="nav-btn" id="nextBtn">次へ →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        });
+
+        showSlide(0);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        });
+    </script>
+</body>
+</html>
